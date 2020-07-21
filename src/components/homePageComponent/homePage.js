@@ -1,35 +1,34 @@
 import React, { Component } from "react";
 import { LobbyAPI } from "../../api";
 import './homePage.css';
+import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import CreateRoom from '../modal/createRoom/createRoom';
+import JoinRoom from '../modal/joinRoom/joinRoom';
 
-const info_texts = {
-    start: "Create a new room and invite your friend to join",
-    help: "Game rules and guide to playing Udaipur",
-    join: "Join a room using the room code",
-};
+
 const api = new LobbyAPI();
+
 class HomePage extends Component {
     state = {
-        text: "",
-        loading: false,
-        redirect: null,
+        showCreateRoom: false,
+        showJoinRoom: false,
     };
-    hoverIn = (src) => {
-        let infoText = "";
-        if (Object.keys(info_texts).includes(src)) {
-            infoText = info_texts[src];
-        } else {
-            console.log("Unrecognized key for info_text");
-        }
-        this.setState({
-            text: infoText,
-        });
+    handleCreateRoomShow = () => {
+        this.setState({ showCreateRoom: true });
     };
-    hoverOut = () => {
-        this.setState({
-            text: "",
-        });
+    handleCreateRoomClose = () => {
+        this.setState({ showCreateRoom: false });
     };
+    handleJoinRoomShow = () => {
+        this.setState({ showJoinRoom: true });
+    };
+    handleJoinRoomClose = () => {
+        this.setState({ showJoinRoom: false });
+    };
+
     createGame = () => {
         console.log("createGame");
         if (this.state.loading) {
@@ -54,11 +53,23 @@ class HomePage extends Component {
     };
     render() {
         const history = this.props.history;
+
         return (
             <div class="center">
-                <button>Centered Button</button>
-                <button>Centered Button</button>
-            </div>
+
+                <Container>
+                    <Row>
+                        <Col>
+                            <Button variant="primary" value="Open" onClick={this.handleCreateRoomShow} >Create Room</Button>
+                        </Col>
+                        <Col>
+                            <Button variant="primary" value="Open" onClick={this.handleJoinRoomShow}>Join Room</Button>
+                        </Col>
+                    </Row>
+                </Container>
+                <CreateRoom state={this.state} onHide={() => this.handleCreateRoomClose()}> </CreateRoom>
+                <JoinRoom state={this.state} onHide={() => this.handleJoinRoomClose()}> </JoinRoom>
+            </div >
         );
     }
 
